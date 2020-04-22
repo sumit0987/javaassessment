@@ -10,6 +10,6 @@ import com.foodzone.dto.FundsTransferDto;
 public interface BankClient {
 	
 	@PostMapping("/payment")
-	public String transferFunds(@RequestBody FundsTransferDto fundsTransferDto);
+	public int transferFunds(@RequestBody FundsTransferDto fundsTransferDto);
 	
 }

@@ -26,7 +26,7 @@ public class BankController {
 	
 	
 	@PostMapping("/payment")
-	public String transferFunds(@RequestBody FundsTransferDto fundsTransferDto) {
+	public int transferFunds(@RequestBody FundsTransferDto fundsTransferDto) {
 		return bankService.transferFunds(fundsTransferDto);
 	}
 	
@@ -40,7 +40,7 @@ public class BankController {
 		return accountNumber;
 	}
 	
-	@GetMapping("/ministatement")
+	@GetMapping("/ministatement/{accountNumber}")
 	public List<TransactionDetails> getMiniStatement(@PathVariable Long accountNumber) {
 		List<TransactionDetails> transactionList = bankService.getMiniStatement(accountNumber);
 		if(Objects.isNull(transactionList)||transactionList.size()==0) {
@@ -49,7 +49,7 @@ public class BankController {
 		return transactionList;
 	}
 	
-	@GetMapping("/statement")
+	@GetMapping("/statement/{accountNumber}/{month}/{year}")
 	public List<TransactionDetails> getMonthlyStatement(@PathVariable Long accountNumber, @PathVariable String month,@PathVariable String year) {
 		List<TransactionDetails> transactionList = bankService.getMonthlyStatement(accountNumber,month,year);
 		if(Objects.isNull(transactionList)||transactionList.size()==0) {

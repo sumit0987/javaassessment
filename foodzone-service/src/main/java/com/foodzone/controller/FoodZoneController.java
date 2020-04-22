@@ -61,7 +61,7 @@ public class FoodZoneController {
 		return placedOrder;
 	}
 	
-	@GetMapping("/orders/{id}")
+	@GetMapping("/orders/{orderId}")
 	public Order getOrder(@PathVariable long orderId) {
 		return orderService.getOrder(orderId);
 	}

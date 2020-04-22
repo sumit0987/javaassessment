@@ -84,7 +84,7 @@ public class BankServiceImpl implements BankService {
 
 	@Override
 	@Transactional
-	public String transferFunds(FundsTransferDto fundsTransferDto) {
+	public int transferFunds(FundsTransferDto fundsTransferDto) {
 		// TODO Auto-generated method stub
 		int customerId=0;
 		int payeeId=0;
@@ -111,9 +111,9 @@ public class BankServiceImpl implements BankService {
 		fundsTransaction.setAccountNumber(payeeAccount.getAccountNumber());
 		fundsTransaction.setTransactionAmount(amount);
 		fundsTransaction.setTransactionType("debit");
-		transactionRepo.save(fundsTransaction);
+		TransactionDetails transaction = transactionRepo.save(fundsTransaction);
 		
-		return "Funds transferred";
+		return transaction.getTransactionId();
 	}
 	
 	@Override
@@ -123,7 +123,8 @@ public class BankServiceImpl implements BankService {
 		if(Objects.isNull(account)) {
 			throw new RuntimeException("Transaction history does not exxist");
 		}
-		return transactionRepo.findHistory(accountNumber);
+		//return transactionRepo.findHistory(accountNumber);
+		return transactionRepo.findTop5ByAccountNumberOrderByTransactionIdDesc(accountNumber);
 	}
 	
 	@Override

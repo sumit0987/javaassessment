@@ -40,6 +40,11 @@ public class OrderServiceImpl implements OrderService {
 		System.out.println("Inside ");
 		List<OrderItemDto> orderItemDtoList = orderDto.getOrderItemList();
 		Order order = new Order();
+		long userId = orderDto.getUserId();
+		Optional<User> user = userRepository.findById(userId);
+		
+		order.setOrderDate(new Date());
+		order.setUser(user.get());
 		List<OrderItem> orderItemsList = new ArrayList<OrderItem>();
 		for (OrderItemDto orderItemDto : orderItemDtoList) {
 			OrderItem orderItem = new OrderItem();
@@ -47,25 +52,23 @@ public class OrderServiceImpl implements OrderService {
 			orderItem.setItemCost(orderItemDto.getItemCost());
 			orderItem.setQuantity(orderItemDto.getQuantity());
 			orderItem.setTotalCost(orderItemDto.getItemCost()*orderItemDto.getQuantity());
+			orderItem.setOrder(order);
 			orderItemsList.add(orderItem);
 		}
 		double totalOrderCost=0.00;
 		for (OrderItem orderItem : orderItemsList) {
 			totalOrderCost = totalOrderCost+orderItem.getTotalCost();
 		}
-		long userId = orderDto.getUserId();
-		Optional<User> user = userRepository.findById(userId);
+		
 		order.setOrderCost(totalOrderCost);
-		order.setPaymentId(567);
 		order.setOrderItems(orderItemsList);
-		order.setOrderDate(new Date());
-		order.setUser(user.get());
+		
 
-		String status = bankClient.transferFunds(orderDto.getFundsTransferDto());
-		if(Objects.isNull(status)||!status.equalsIgnoreCase("Funds transferred")) {
+		int transactionId = bankClient.transferFunds(orderDto.getFundsTransferDto());
+		if(Objects.isNull(transactionId)||transactionId==0) {
 			throw new RuntimeException("Order cannot be placed......Error occurred");
 		}
-		
+		order.setPaymentId(transactionId);
 		Order orderPlaced = orderRepository.save(order);
 		return orderPlaced;
 		
@@ -86,7 +89,8 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<Order> getPastOrders(long userId) {
 		// TODO Auto-generated method stub
-		List<Order> orderList = orderRepository.findTop5ByUserIdOrderByorderDateDesc(userId);
+		List<Order> orderList = orderRepository.findOrderHistory(userId);
+		//List<Order> orderList = orderRepository.findTop5ByUserIdOrderByOrderDateDesc(userId);
 		if(Objects.isNull(orderList)||orderList.size()==0) {
 			throw new RuntimeException("No Record Found");
 		}

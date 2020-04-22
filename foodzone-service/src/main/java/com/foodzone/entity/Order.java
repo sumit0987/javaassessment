@@ -13,9 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
-@Table(name="order")
+@Table(name="order_detail")
 public class Order {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -32,6 +34,7 @@ public class Order {
 			CascadeType.PERSIST,CascadeType.REFRESH,
 			CascadeType.REMOVE})
 	@JoinColumn(name="user_id")
+	//@JsonIgnore
 	private User user;
 	
 	private Date orderDate;

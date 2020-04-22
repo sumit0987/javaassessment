@@ -10,6 +10,8 @@ import com.bankservice.entity.TransactionDetails;
 
 public interface TransactionRepository extends CrudRepository<TransactionDetails, Integer> {
 	
-	@Query(value="select * from TRANSACTION_DETAILS where ACCOUNT_NUMBER=?1  and ROWNUM <=5 order by TRANSACTION_DATE ",nativeQuery=true)
-	public List<TransactionDetails> findHistory(Long accountNumber);
+//	@Query(value="select * from TRANSACTION_DETAILS where ACCOUNT_NUMBER=?1 ORDER BY TRANSACTION_ID DESC LIMIT 5",nativeQuery=true)
+//	public List<TransactionDetails> findHistory(Long accountNumber);
+	
+	List<TransactionDetails> findTop5ByAccountNumberOrderByTransactionIdDesc(long accountNumber);
 }

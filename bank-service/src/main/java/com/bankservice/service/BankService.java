@@ -8,7 +8,7 @@ import com.bankservice.entity.TransactionDetails;
 
 public interface BankService {
 	public String registerCustomer(CustomerDto customerDto);
-	public String transferFunds(FundsTransferDto fundsTransferDto);
+	public int transferFunds(FundsTransferDto fundsTransferDto);
 	public List<TransactionDetails> getMiniStatement(long accountNumber);
 	public List<TransactionDetails> getMonthlyStatement(long accountNumber,String month,String year);
 }
