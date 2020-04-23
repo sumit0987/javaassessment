@@ -16,6 +16,7 @@ import com.foodzone.client.BankClient;
 import com.foodzone.dto.OrderDto;
 import com.foodzone.dto.UserDto;
 import com.foodzone.entity.FoodOutlet;
+import com.foodzone.entity.MenuItem;
 import com.foodzone.entity.Order;
 import com.foodzone.entity.User;
 import com.foodzone.service.OrderService;
@@ -50,6 +51,15 @@ public class FoodZoneController {
 			throw new RuntimeException("Record not found for : "+outletName);
 		}
 		return outletList;
+	}
+	
+	@GetMapping("/menuitems/{menuItem}")
+	public List<MenuItem> searchMenuItems(@PathVariable String menuItem){
+		List<MenuItem> menuItemList = outletService.searchMenuItems(menuItem);
+		if(Objects.isNull(menuItemList)||menuItemList.size()==0) {
+			throw new RuntimeException("Record not found for : "+menuItem);
+		}
+		return menuItemList;
 	}
 	
 	@PostMapping("/orders")

@@ -30,7 +30,7 @@ public class BatchJobScheduler {
 	Job job;
 	
 	
-	@Scheduled(fixedRate = 100000)
+	@Scheduled(fixedRate = 100000000)
 	public BatchStatus load() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		Map<String, JobParameter> parameters=new HashMap<>();
 		parameters.put("time", new JobParameter(System.currentTimeMillis()));
